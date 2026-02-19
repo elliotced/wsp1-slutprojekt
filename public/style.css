@@ -1,7 +1,92 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+               "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
 body {
-  font-family: sans-serif;
-  color: #666;
-  background-color: #f1f1f1;
-  font-size: x-large;
-  margin: 1em;
+  background: #121212;
+  color: #ffffff;
+}
+
+/* Layout */
+.app {
+  display: flex;
+  height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 260px;
+  background: #1c1c1e;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid rgba(255,255,255,0.05);
+}
+
+/* Title */
+.logo {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+/* Search */
+.search {
+  margin-bottom: 25px;
+}
+
+.search input {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  background: #2c2c2e;
+  color: white;
+  font-size: 14px;
+  outline: none;
+}
+
+.search input::placeholder {
+  color: #8e8e93;
+}
+
+.search input:focus {
+  background: #3a3a3c;
+}
+
+/* Navigation */
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.nav-item {
+  text-decoration: none;
+  color: #d1d1d6;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: background 0.2s ease;
+}
+
+.nav-item:hover {
+  background: #2c2c2e;
+}
+
+.nav-item.active {
+  background: #2c2c2e;
+  color: white;
+  font-weight: 500;
+}
+
+/* Content */
+.content {
+  flex: 1;
+  padding: 40px;
 }

@@ -3,11 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projekt #2</title>
+    <title>CloudWave - Home</title>
     <link rel="stylesheet" type="text/css" href="/style.css?<%=Time.now.to_i%>">
 </head>
 <body>
-  <h1>Webbserverprogrammering 1 - Slutprojekt</h1>
-  <img src="/img/glhf.png">
+  <div class="app">
+
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1 class="logo">CloudWave</h1>
+
+        <div class="search">
+          <input type="text" placeholder="Search">
+        </div>
+      </div>
+
+      <nav class="nav">
+        <a href="#" class="nav-item active">Home</a>
+        <a href="#" class="nav-item">Library</a>
+        <a href="#" class="nav-item">Login</a>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <h2>New</h2>
+    </main>
+
+  </div>
 </body>
+
 </html>
