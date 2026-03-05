@@ -1,5 +1,12 @@
-require_relative 'config'
 require 'rake'
+
+desc "Default task som körs när man bara skriver 'rake'"
+task default: [] do
+  if !File.exist?(db/database.sqlite)
+    Rake::Task[:seed].invoke
+  end
+  Rake::Task[:dev].invoke
+end
 
 desc "Starta appen (Auto-reload via sinatra-reloader)"
 task :dev do
@@ -13,17 +20,8 @@ end
 
 desc "Seedning av databasen"
 task :seed do
-  require_relative './db/seeder'
-  Seeder.seed!
+  require_relative './db/seeder.rb'
   puts "✅ Databasen är återställd!"
-end
-
-# Default task som körs när man bara skriver 'rake'
-task default: [] do
-  if !File.exist?(DB_PATH)
-    Rake::Task[:seed].invoke
-  end
-  Rake::Task[:dev].invoke
 end
 
 task :kill do

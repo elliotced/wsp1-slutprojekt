@@ -1,6 +1,4 @@
-require 'sqlite3'
-require_relative '../config'
-require 'bcrypt'
+require_relative '../config.rb'
 
 class Seeder
   
@@ -65,20 +63,11 @@ class Seeder
   end
 
   def self.populate_tables
-    password_hashed = BCrypt::Password.create("123")
-    p "Storing hashed password (#{password_hashed}) to DB. Clear text password (123) never saved."
-    db.execute('INSERT INTO users (username, password) VALUES (?, ?)', ["ola", password_hashed])
+    ola_password_hashed = BCrypt::Password.create("123")
+    db.execute('INSERT INTO users (username, password) VALUES (?, ?)', ["ola", ola_password_hashed])
 
     db.execute('INSERT INTO artists (name, description) VALUES ("Tame Impala", "Kevin parker is from Australia.")')
     db.execute('INSERT INTO songs (name, mp3_path, artist_id) VALUES ("Borderline", "songs/borderline.mp3", 1)')
-  end
-
-  private
-  def self.db
-    return @db if @db
-    @db = SQLite3::Database.new('db/database.sqlite')
-    @db.results_as_hash = true
-    @db
   end
 end
 

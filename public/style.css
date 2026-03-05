@@ -98,3 +98,17 @@ html, body {
   box-shadow: 0 20px 40px rgba(0,0,0,0.4);
   min-height: 300px;
 }
+
+.login-status {
+  height: 2px;
+  border-radius: 2px;
+  margin-top: 6px;
+}
+
+.login-status.logged-in {
+  background-color: #4ade80; /* light green */
+}
+
+.login-status.logged-out {
+  background-color: #f87171; /* light red */
+}

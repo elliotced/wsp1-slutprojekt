@@ -9,10 +9,11 @@
 
 <body>
   <div class="app">
-
+  
     <aside class="sidebar">
       <div class="sidebar-header">
         <h1 class="logo">CloudWave</h1>
+        <div class="login-status <%= @logged_in ? 'logged-in' : 'logged-out' %>"></div>
       </div>
 
       <nav class="nav">
