@@ -1,4 +1,5 @@
 require_relative 'config.rb'
+require_relative 'models/user.rb'
 
 class App < Sinatra::Base
 
@@ -12,8 +13,6 @@ class App < Sinatra::Base
     
     get '/' do
         @current_page = "Home"
-        a = db.execute("select * from SONGS")
-        p a
         erb :"index"
     end
 
@@ -28,33 +27,28 @@ class App < Sinatra::Base
     end
 
     post '/users/login' do
-        request_username = params[:username]
-        request_plain_password = params[:password]
-        user = db.execute("SELECT *
-                FROM users
-                WHERE username = ?",
-                request_username).first
+        username = params[:username]
+        plain_password = params[:password]
+        user = User.login(username)
 
-        unless user
-            ap "/users/login : Invalid username."
-            status 401
-            redirect '/acces_denied'
+        if !user
+            session[:error] = "401 Unauthorized - User does not exist"
+            redirect '/error'
         end
 
         db_id = user["id"].to_i
-        db_password_hashed = user["password"].to_s
+        hashed_password = user["password"].to_s
 
         # Create a BCrypt object from the hashed password from db
-        bcrypt_db_password = BCrypt::Password.new(db_password_hashed)
+        unhashed_password = BCrypt::Password.new(hashed_password)
         # Check if the plain password matches the hashed password from db
-        if bcrypt_db_password == request_plain_password
+        if unhashed_password == plain_password
             ap "/users/login : Logged in"
             session[:user_id] = db_id
             redirect '/'
         else
-            ap "/users/login : Invalid password."
-            status 401
-            redirect '/acces_denied'
+            session[:error] = "401 Unauthorized - Invalid Password"
+            redirect '/error'
         end
     end
 
@@ -64,12 +58,25 @@ class App < Sinatra::Base
     end
 
     post '/users/register' do
-        
+        username = params[:username]
+        plain_password = params[:password]
+
+        hashed_password = BCrypt::Password.create(plain_password)
+
+        exists = User.register(username,hashed_password)
+
+        if exists == true
+            session[:error] = "409 Conflict - Invalid Password"
+            redirect '/error'            
+        else 
+            redirect '/'
+        end
     end
 
-    get '/acces_denied' do
-        @current_page = "401"
-        erb :"access_denied"
+    get '/error' do
+        @current_page = "Error"
+        @error = session[:error]
+        erb :"error"  
     end
 
 end

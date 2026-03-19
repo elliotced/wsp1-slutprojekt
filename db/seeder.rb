@@ -63,9 +63,7 @@ class Seeder
   end
 
   def self.populate_tables
-    ola_password_hashed = BCrypt::Password.create("123")
-    db.execute('INSERT INTO users (username, password) VALUES (?, ?)', ["ola", ola_password_hashed])
-
+    
     db.execute('INSERT INTO artists (name, description) VALUES ("Tame Impala", "Kevin parker is from Australia.")')
     db.execute('INSERT INTO songs (name, mp3_path, artist_id) VALUES ("Borderline", "songs/borderline.mp3", 1)')
   end
