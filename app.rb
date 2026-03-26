@@ -1,4 +1,5 @@
 require_relative 'config.rb'
+require_relative 'models/song.rb'
 require_relative 'models/user.rb'
 
 class App < Sinatra::Base
@@ -14,6 +15,24 @@ class App < Sinatra::Base
     get '/' do
         @current_page = "Home"
         erb :"index"
+    end
+
+    get '/songs' do
+        @current_page = "Songs"
+        @songs = Song.index
+        erb :"songs/index"
+    end
+
+    get '/songs/new' do
+        @current_page = "New Song"
+        erb :"songs/new"  
+    end
+
+    post '/songs/new' do
+        name = params[:name]
+
+        Song.create(name, 1)
+        redirect "/songs"
     end
 
     get '/users' do
@@ -66,7 +85,7 @@ class App < Sinatra::Base
         exists = User.register(username,hashed_password)
 
         if exists == true
-            session[:error] = "409 Conflict - Invalid Password"
+            session[:error] = "409 Conflict - User already exists"
             redirect '/error'            
         else 
             redirect '/'

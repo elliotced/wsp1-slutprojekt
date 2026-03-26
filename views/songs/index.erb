@@ -1,0 +1,11 @@
+<a href="/songs/new" class="nav-item">Upload song</a>
+
+<h2>Here are all songs available on CloudWave.</h2>
+
+<ul>
+<% @songs.each do |song| %>
+  <li>
+    <h1><%= song['name'] %></h1>
+  </li>
+<% end %>
+</ul>
