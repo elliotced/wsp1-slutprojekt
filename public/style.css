@@ -1,114 +1,335 @@
-/* ===== Reset ===== */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* ── Reset & Base ─────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #0a0a0a;
+  --surface:   #161616;
+  --elevated:  #1e1e1e;
+  --border:    rgba(255,255,255,.08);
+  --accent:    #fc3c44;
+  --text:      #f5f5f7;
+  --muted:     #86868b;
+  --sidebar-w: 220px;
+  --radius:    12px;
+  font: 400 15px/1.5 "SF Pro Text", -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-html, body {
-  height: 100%;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
-               "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  background: #0f0f0f;
-  color: #f5f5f7;
+body {
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* ===== App Layout ===== */
+a { color: inherit; text-decoration: none; }
+input, button { font: inherit; }
+
+/* ── Layout ───────────────────────────────────── */
 .app {
   display: flex;
-  height: 100vh;
-  background: linear-gradient(180deg, #111111 0%, #0a0a0a 100%);
+  min-height: 100vh;
 }
 
-/* ===== Sidebar ===== */
+/* ── Sidebar ──────────────────────────────────── */
 .sidebar {
-  width: 260px;
-  padding: 24px 18px;
-  background: rgba(28, 28, 30, 0.85);
-  backdrop-filter: blur(20px);
-  border-right: 1px solid rgba(255,255,255,0.05);
+  width: var(--sidebar-w);
+  min-height: 100vh;
+  background: rgba(22,22,22,.85);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-right: 1px solid var(--border);
   display: flex;
   flex-direction: column;
+  padding: 28px 0 20px;
+  position: sticky;
+  top: 0;
+  flex-shrink: 0;
 }
 
 .sidebar-header {
-  margin-bottom: 40px;
+  padding: 0 20px 24px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
 }
 
 .logo {
-  font-size: 22px;
-  font-weight: 600;
-  letter-spacing: -0.5px;
+  font: 700 20px/1 "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: -.4px;
+  color: var(--accent);
+  margin-bottom: 8px;
 }
 
-/* ===== Navigation ===== */
-.nav {
+.sidebar-header h2 {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+nav {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 2px;
+  padding: 0 10px;
 }
 
 .nav-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 14px;
+  display: block;
+  padding: 9px 12px;
   border-radius: 8px;
-  text-decoration: none;
-  color: #b3b3b3;
-  font-size: 15px;
-  transition: all 0.2s ease;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+  transition: background .15s, color .15s;
 }
 
 .nav-item:hover {
-  background: rgba(255,255,255,0.06);
-  color: #ffffff;
+  background: rgba(255,255,255,.06);
+  color: var(--text);
 }
 
 .nav-item.active {
-  background: rgba(255,255,255,0.10);
-  color: #ffffff;
-  font-weight: 500;
+  background: rgba(252,60,68,.15);
+  color: var(--accent);
 }
 
-/* ===== Main Content ===== */
+/* ── Main Content ─────────────────────────────── */
 .content {
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 32px 40px;
-  overflow-y: auto;
+  min-width: 0;
 }
 
 .content-header {
-  margin-bottom: 30px;
+  padding: 32px 40px 0;
+  margin-bottom: 8px;
 }
 
 .content-header h2 {
-  font-size: 32px;
-  font-weight: 600;
-  letter-spacing: -1px;
+  font: 700 28px/1.1 "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: -.6px;
 }
 
-/* ===== Content Body ===== */
 .content-body {
-  background: rgba(255,255,255,0.03);
-  padding: 24px;
-  border-radius: 14px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-  min-height: 300px;
+  padding: 24px 40px 40px;
 }
 
-.login-status {
-  height: 2px;
-  border-radius: 2px;
-  margin-top: 6px;
+/* ── Card ─────────────────────────────────────── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
 }
 
-.login-status.logged-in {
-  background-color: #4ade80; /* light green */
+/* ── Forms ────────────────────────────────────── */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 360px;
 }
 
-.login-status.logged-out {
-  background-color: #f87171; /* light red */
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+input[type="text"],
+input[type="password"] {
+  background: var(--elevated);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 15px;
+  color: var(--text);
+  outline: none;
+  transition: border-color .15s, box-shadow .15s;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(252,60,68,.2);
+}
+
+fieldset {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+legend {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  padding: 0 4px;
+}
+
+fieldset label {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--text);
+  cursor: pointer;
+}
+
+input[type="radio"] {
+  accent-color: var(--accent);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+/* ── Button ───────────────────────────────────── */
+.btn,
+button[type="submit"] {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 22px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: opacity .15s, transform .1s;
+}
+
+.btn:hover,
+button[type="submit"]:hover { opacity: .88; }
+
+.btn:active,
+button[type="submit"]:active { transform: scale(.97); }
+
+/* ── Manage Account Links ─────────────────────── */
+.link-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.link-list .nav-item {
+  background: var(--elevated);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background .15s, border-color .15s;
+}
+
+.link-list .nav-item:hover {
+  background: rgba(252,60,68,.12);
+  border-color: rgba(252,60,68,.3);
+  color: var(--accent);
+}
+
+/* ── Songs Toolbar ────────────────────────────── */
+.songs-toolbar {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+}
+
+/* ── Song List ────────────────────────────────── */
+.song-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.song-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  transition: background .15s;
+  cursor: default;
+}
+
+.song-row:hover {
+  background: var(--surface);
+}
+
+.song-thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  background: var(--elevated);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+  color: var(--muted);
+}
+
+.song-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.song-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.song-artist {
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Empty State ──────────────────────────────── */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 20px;
+  gap: 8px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 40px;
+  margin-bottom: 4px;
+}
+
+.empty-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.empty-sub {
+  font-size: 13px;
 }

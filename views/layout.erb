@@ -3,23 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CloudWave - <%=@current_page%></title>
-  <link rel="stylesheet" href="/style.css?<%=Time.now.to_i%>">
+  <title>RubySong - <%= @current_page %></title>
+  <link rel="stylesheet" href="/style.css?<%= Time.now.to_i %>">
 </head>
-
 <body>
   <div class="app">
-  
+
     <aside class="sidebar">
       <div class="sidebar-header">
-        <h1 class="logo">CloudWave</h1>
-        <div class="login-status <%= @logged_in ? 'logged-in' : 'logged-out' %>"></div>
+        <h1 class="logo">RubySong</h1>
+        <% if @account %>
+          <h2>Logged in as:</h2>
+          <h2><%= @account["name"]%></h2>
+          <h2><%= @account["type"]%></h2> 
+        <% else %>
+          <h2>Not logged in</h2>
+        <% end %>
       </div>
-
-      <nav class="nav">
-        <a href="/" class="nav-item">Home</a>
-        <a href="/songs" class="nav-item">Songs</a>
-        <a href="/users" class="nav-item">User</a>
+      <nav>
+        <a href="/"        class="nav-item">Home</a>
+        <a href="/songs"   class="nav-item">Songs</a>
+        <a href="/accounts" class="nav-item">Account</a>
       </nav>
     </aside>
 
@@ -27,7 +31,6 @@
       <header class="content-header">
         <h2><%= @current_page %></h2>
       </header>
-
       <section class="content-body">
         <%= yield %>
       </section>

@@ -1,6 +1,6 @@
 require_relative 'config.rb'
 require_relative 'models/song.rb'
-require_relative 'models/user.rb'
+require_relative 'models/account.rb'
 
 class App < Sinatra::Base
 
@@ -8,7 +8,7 @@ class App < Sinatra::Base
 
     before do
         @current_page = ""
-        @logged_in = !session[:user_id].nil?
+        @account = session[:current_account]
     end
 
     
@@ -19,7 +19,7 @@ class App < Sinatra::Base
 
     get '/songs' do
         @current_page = "Songs"
-        @songs = Song.index
+        @songs = Song.all
         erb :"songs/index"
     end
 
@@ -30,71 +30,118 @@ class App < Sinatra::Base
 
     post '/songs/new' do
         name = params[:name]
+        id = @account["id"]
 
-        Song.create(name, 1)
-        redirect "/songs"
-    end
-
-    get '/users' do
-        @current_page = "Users"
-        erb :"users/user"
-    end
-
-    get '/users/login' do
-        @current_page = "Login"
-        erb :"users/login"
-    end
-
-    post '/users/login' do
-        username = params[:username]
-        plain_password = params[:password]
-        user = User.login(username)
-
-        if !user
-            session[:error] = "401 Unauthorized - User does not exist"
+        if Song.find_by_name(name)
+            #Create failed - name already exists
+            session[:error] = "409 Conflict - Song name already exists"
             redirect '/error'
         end
 
-        db_id = user["id"].to_i
-        hashed_password = user["password"].to_s
+        Song.create(name, id)
+        redirect "/songs"
+    end
+
+    get '/songs/:id' do  | id |
+        @current_page = "Viewing Song"
+        @song = Song.find_by_id(id)
+        erb :"songs/view"  
+    end
+
+    get '/songs/:id/update' do  | id |
+        @current_page = "Update Song"
+        @song = Song.find_by_id(id)
+        erb :"songs/update"  
+    end
+
+    post '/songs/:id/update' do  | id |
+        title = params[:title]
+        Song.update(title,id)
+        redirect "/songs"
+    end
+
+
+    post '/songs/:id/delete' do | id |
+        Song.delete(id)
+        redirect "/songs"
+    end
+
+    get '/accounts' do
+        @current_page = "Manage account"
+        erb :"accounts/manage"
+    end
+
+    post '/accounts/logout' do
+        session[:current_account] = nil
+        redirect '/accounts'
+    end
+
+    get '/accounts/login' do
+        @current_page = "Login"
+        erb :"accounts/login"
+    end
+
+    post '/accounts/login' do
+        name = params[:name]
+        plain_password = params[:password]
+        account = Account.find(name)
+
+        if !account
+            #Login failed - no user
+            session[:error] = "401 Unauthorized - Account does not exist"
+            redirect '/error'
+        end
+
+        hashed_password = account["password"].to_s
 
         # Create a BCrypt object from the hashed password from db
         unhashed_password = BCrypt::Password.new(hashed_password)
         # Check if the plain password matches the hashed password from db
         if unhashed_password == plain_password
-            ap "/users/login : Logged in"
-            session[:user_id] = db_id
-            redirect '/'
+            #Login success - correct password
+            session[:current_account] = account
+            redirect '/accounts'
         else
-            session[:error] = "401 Unauthorized - Invalid Password"
+            #Login failed - incorrect password
+            session[:error] = "401 Unauthorized - Incorrect Password"
             redirect '/error'
         end
     end
 
-    get '/users/register' do
+    get '/accounts/register' do
         @current_page = "Register"
-        erb :"users/register"
+        erb :"accounts/register"
     end
 
-    post '/users/register' do
-        username = params[:username]
+    post '/accounts/register' do
+        name = params[:name]
         plain_password = params[:password]
+        type = params[:type]
+        account = Account.find(name)
 
         hashed_password = BCrypt::Password.create(plain_password)
 
-        exists = User.register(username,hashed_password)
-
-        if exists == true
-            session[:error] = "409 Conflict - User already exists"
+        if account
+            #Register failed - name already exists
+            session[:error] = "409 Conflict - Account name already exists"
             redirect '/error'            
-        else 
-            redirect '/'
+        else
+            #Register success - name not used
+            Account.register(name, hashed_password, type)
+            session[:current_account] = Account.find(name)
+            redirect '/accounts'
         end
     end
 
     get '/error' do
         @current_page = "Error"
         @error = session[:error]
+        erb :"error"  
+    end
+
+    not_found do
+        @current_page = "Error"
+        @error = "404 Not Found"
         erb :"error"  
     end
 

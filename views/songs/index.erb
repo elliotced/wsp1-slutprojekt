@@ -1,11 +1,17 @@
-<a href="/songs/new" class="nav-item">Upload song</a>
+<div class="songs-toolbar">
+  <% if @account && (@account["type"] == "artist" || @account["type"] == "admin") %>
+    <a href="/songs/new" class="btn">Upload Song</a>
+  <% end %>
+</div>
 
-<h2>Here are all songs available on CloudWave.</h2>
-
-<ul>
-<% @songs.each do |song| %>
-  <li>
-    <h1><%= song['name'] %></h1>
-  </li>
-<% end %>
+<ul class="song-list">
+  <% @songs.each do |song| %>
+    <li class="song-row">
+      <div class="song-thumb">♦️</div>
+      <a href="/songs/<%= song['id'] %>" class="song-info">
+        <span class="song-name"><%= song['title'] %></span>
+        <span class="song-artist"><%= song['artist_name'] %></span>
+      </a>
+    </li>
+  <% end %>
 </ul>

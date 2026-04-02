@@ -1,0 +1,11 @@
+<h1><%= @song['title'] %></h1>
+<div class="link-list">
+    <% if @account %>
+        <% if @account['id'] == @song['artist_id'] %>
+            <a href="/songs/<%= @song['id'] %>/update" class="nav-item">Update</a>
+            <form action="/songs/<%= @song['id'] %>/delete" method="POST">
+                <button type="submit">Delete</button>
+            </form>
+        <% end %>
+    <% end %>
+</div>

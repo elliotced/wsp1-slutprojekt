@@ -1,0 +1,14 @@
+<form action="/accounts/register" method="POST">
+  <label>Name
+    <input type="text" name="name" required>
+  </label>
+  <label>Password
+    <input type="password" name="password" required>
+  </label>
+  <fieldset>
+    <legend>Account type</legend>
+    <label><input type="radio" name="type" value="user" checked> Personal</label>
+    <label><input type="radio" name="type" value="artist"> Artist</label>
+  </fieldset>
+  <button type="submit">Register Account</button>
+</form>

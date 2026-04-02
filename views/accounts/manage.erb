@@ -1,0 +1,10 @@
+<div class="link-list">
+  <% if @account %>
+    <form action="/accounts/logout" method="POST">
+      <button type="submit">Logout</button>
+    </form>
+  <% else %>
+    <a href="/accounts/login" class="nav-item">Login</a>
+    <a href="/accounts/register" class="nav-item">Register</a>
+  <% end %>
+</div>
