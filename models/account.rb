@@ -7,4 +7,8 @@ class Account
   def self.register(name, password, type)
     db.execute("INSERT INTO accounts (name, password, type) VALUES (?, ?, ?)", [name, password, type])
   end
+
+  def self.delete(id)
+    db.execute("DELETE FROM accounts WHERE id=?", id).first
+  end
 end

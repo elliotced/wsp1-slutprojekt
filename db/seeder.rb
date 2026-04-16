@@ -25,11 +25,11 @@ class Seeder
     db.execute('CREATE TABLE genres (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name TEXT,
-                png_path TEXT)')
+                img_path TEXT)')
 
     db.execute('CREATE TABLE genres_songs (
-                genre_id INTEGER,
-                song_id INTEGER)')
+                genre_id INT,
+                song_id INT)')
 
     db.execute('CREATE TABLE songs (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -39,6 +39,9 @@ class Seeder
 
   def self.populate_tables
     db.execute('INSERT INTO accounts (name, password, type) VALUES (?, ?, ?)', ["ola", BCrypt::Password.create("123"), "admin"])
+    db.execute('INSERT INTO genres (name, img_path) VALUES (?, ?)', ["Dance", "img/genre/dance.jpg"])
+    db.execute('INSERT INTO genres_songs (genre_id, song_id) VALUES (?, ?)', [1,1])
+    db.execute('INSERT INTO songs (title, artist_id) VALUES (?, ?)', ["Trudelutt", 1])
   end
 end
 

@@ -1,0 +1,10 @@
+<ul class="genre-grid">
+  <% @genres.each do |genre| %>
+    <li class="genre-card">
+      <a href="/genres/<%= genre['id'] %>">
+        <img src="<%= genre['img_path'] %>" alt="<%= genre['name'] %>">
+        <span class="genre-title"><%= genre['name'] %></span>
+      </a>
+    </li>
+  <% end %>
+</ul>

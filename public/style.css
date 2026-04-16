@@ -333,3 +333,52 @@ button[type="submit"]:active { transform: scale(.97); }
 .empty-sub {
   font-size: 13px;
 }
+
+/* ── Genre Grid ───────────────────────────────── */
+.genre-grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.genre-card a {
+  display: block;
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+}
+
+.genre-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .3s ease, filter .3s ease;
+}
+
+.genre-card a:hover img {
+  transform: scale(1.05);
+  filter: brightness(.65);
+}
+
+.genre-card a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,.75) 0%, rgba(0,0,0,.1) 50%, transparent 100%);
+}
+
+.genre-title {
+  position: absolute;
+  bottom: 14px;
+  left: 14px;
+  right: 14px;
+  z-index: 1;
+  font: 700 16px/1.2 "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: -.2px;
+  color: #fff;
+  text-shadow: 0 1px 4px rgba(0,0,0,.5);
+  pointer-events: none;
+}

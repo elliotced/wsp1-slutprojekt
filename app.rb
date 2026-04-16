@@ -1,4 +1,5 @@
 require_relative 'config.rb'
+require_relative 'models/genre.rb'
 require_relative 'models/song.rb'
 require_relative 'models/account.rb'
 
@@ -17,6 +18,18 @@ class App < Sinatra::Base
         erb :"index"
     end
 
+    get '/genres' do
+        @current_page = "Genres"
+        @genres = Genre.all
+        erb :"genres/index"
+    end
+
+    get '/genres/:id' do | id |
+        @current_page = "Viewing Genre"
+        @genre = Genre.find_by_id(id)
+        erb :"genres/view"
+    end
+
     get '/songs' do
         @current_page = "Songs"
         @songs = Song.all
@@ -24,11 +37,18 @@ class App < Sinatra::Base
     end
 
     get '/songs/new' do
+        if @account == nil or @account["type"] == "user"
+            #Create failed
+            session[:error] = "401 Unauthorized - Wrong account permission"
+            redirect '/error'
+        end
+
         @current_page = "New Song"
         erb :"songs/new"  
     end
 
     post '/songs/new' do
+    
         name = params[:name]
         id = @account["id"]
 
@@ -51,6 +71,13 @@ class App < Sinatra::Base
     get '/songs/:id/update' do  | id |
         @current_page = "Update Song"
         @song = Song.find_by_id(id)
+
+        if @account == nil or @account["id"] != @song["artist_id"]
+            #Update failed
+            session[:error] = "401 Unauthorized - Wrong account permission"
+            redirect '/error'
+        end
+
         erb :"songs/update"  
     end
 
@@ -131,6 +158,12 @@ class App < Sinatra::Base
             session[:current_account] = Account.find(name)
             redirect '/accounts'
         end
+    end
+
+    post '/accounts/:id/delete' do | id |
+        Account.delete(id)
+        session[:current_account] = nil
+        redirect "/accounts"
     end
 
     get '/error' do

@@ -3,6 +3,9 @@
     <form action="/accounts/logout" method="POST">
       <button type="submit">Logout</button>
     </form>
+    <form action="/accounts/<%= @account['id'] %>/delete" method="POST">
+      <button type="submit">Delete</button>
+    </form>
   <% else %>
     <a href="/accounts/login" class="nav-item">Login</a>
     <a href="/accounts/register" class="nav-item">Register</a>
