@@ -1,0 +1,13 @@
+<h1><%= @genre['name'] %></h1>
+
+<ul class="song-list">
+  <% @songs.each do |song| %>
+    <li class="song-row">
+      <div class="song-thumb">♦️</div>
+      <a href="/songs/<%= song['id'] %>" class="song-info">
+        <span class="song-name"><%= song['title'] %></span>
+        <span class="song-artist"><%= song['artist_name'] %></span>
+      </a>
+    </li>
+  <% end %>
+</ul>

@@ -1,6 +1,8 @@
 Gemfile.lock
 .byebug_history
 db/*.db.
+.yardoc
+/doc
 
 # Mac
 .DS_Store
@@ -10,3 +12,11 @@ db/*.db.
 
 # Windows
 Thumbs.db
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/

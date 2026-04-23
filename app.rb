@@ -10,6 +10,19 @@ class App < Sinatra::Base
     before do
         @current_page = ""
         @account = session[:current_account]
+
+        if session[:failed_attempts] == nil
+            session[:failed_attempts] = 0
+        end
+        @failed = session[:failed_attempts]
+        @attempts = 3
+        @cooldown = 60
+
+        if session[:locked] && (Time.now.to_i - session[:locked]) >= @cooldown
+            session[:failed_attempts] = 0
+            session[:locked] = nil
+            @failed = 0
+        end
     end
 
     
@@ -27,6 +40,7 @@ class App < Sinatra::Base
     get '/genres/:id' do | id |
         @current_page = "Viewing Genre"
         @genre = Genre.find_by_id(id)
+        @songs = Genre.find_songs_by_genre_id(id)
         erb :"genres/view"
     end
 
@@ -119,6 +133,15 @@ class App < Sinatra::Base
             redirect '/error'
         end
 
+        if @failed >= @attempts
+            #Register failed - name already exists
+            if session[:locked] == nil
+                session[:locked] = Time.now.to_i              
+            end
+            session[:error] = "401 Unauthorized - Too many attempts. Try again in #{@cooldown - (Time.now.to_i - session[:locked])}s"
+            redirect '/error'   
+        end
+
         hashed_password = account["password"].to_s
 
         # Create a BCrypt object from the hashed password from db
@@ -129,9 +152,8 @@ class App < Sinatra::Base
             session[:current_account] = account
             redirect '/accounts'
         else
-            #Login failed - incorrect password
-            session[:error] = "401 Unauthorized - Incorrect Password"
-            redirect '/error'
+            session[:failed_attempts] += 1
+            redirect '/accounts/login'
         end
     end
 
