@@ -16,3 +16,15 @@ test('get started link', async ({ page }) => {
   // Expects page to have a heading with the name of Installation.
   await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible();
 });
+
+test('log in', async ({ page }) => {
+  // Open login account page
+  await page.goto('http://localhost:9292/accounts/login');
+  // Enter name and password
+  await page.getByLabel('Name').fill('ola');
+  await page.getByLabel('Password').fill('123');
+  // Click login button
+  await page.getByRole('button', { name: 'Login' }).click();
+  // Expects to be logged in
+  await expect(page.getByText('Logged in as:')).toBeVisible();
+});

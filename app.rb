@@ -134,7 +134,7 @@ class App < Sinatra::Base
         end
 
         if @failed >= @attempts
-            #Register failed - name already exists
+            #Register failed
             if session[:locked] == nil
                 session[:locked] = Time.now.to_i              
             end
@@ -176,6 +176,7 @@ class App < Sinatra::Base
             redirect '/error'            
         else
             #Register success - name not used
+            puts "Account registered - Name: #{name}, Password: #{plain_password}, Type: #{type},"
             Account.register(name, hashed_password, type)
             session[:current_account] = Account.find(name)
             redirect '/accounts'
